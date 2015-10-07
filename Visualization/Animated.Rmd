@@ -1,0 +1,112 @@
+---
+title: "Animated plot using animation package"
+author: "Tian Zheng"
+date: "October 7, 2015"
+output: html_document
+---
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+Step 1: first you would need to install imageMagick. I used an installer from <http://cactuslab.com/imagemagick/> and that worked well for me. 
+
+Step 2: load the required libraries and map.
+```{r, results="hide"}
+require(animation)
+require(RColorBrewer)
+require(maps)
+require(maptools)
+data(state.vbm)
+```
+
+Step 2: Decide a squence of plots you will make. For this example, we will visualize the variables `Income` and `HS Grad` from the `state.x77` data set. 
+
+```{r, results='hide', fig.height=4, fig.width=6} 
+  fg.col="black"
+  bg.col="transparent"
+
+  par(mfrow=c(1,2), pty="s", font.main=1, 
+      bg=bg.col, fg=fg.col, 
+      col.axis=fg.col, col.main=fg.col, 
+      col.lab=fg.col)
+  par(mar=c(0,0,2,0), mgp=c(0,0,0))
+  
+  tmp.x <- state.x77[,'Income']
+  tmp2.x <- cut(tmp.x, 
+
+  seq(min(tmp.x),max(tmp.x), length.out=10),
+              include.lowest=TRUE)
+  
+  tmp.y <- state.x77[,'HS Grad']
+  tmp2.y <- cut(tmp.y, seq(min(tmp.y),max(tmp.y), length.out=10),
+              include.lowest=TRUE)
+
+  col.fg.x=brewer.pal(9,"Blues")[tmp2.x]
+  col.fg.y=brewer.pal(9,"Reds")[tmp2.y]
+
+  plot(state.vbm,col=col.fg.x, 
+         main="Income Per Capita")
+  plot(state.vbm,col=col.fg.y, 
+         main="Perc. of High School Graduates")
+```
+
+Step 4: Using `saveGIF` to create an animated version of the above figure. 
+
+```{r, results='hide'}
+## Set the time delay between each slide
+ani.options(interval=.2)
+
+# Set foreground and background color. 
+fg.col="black"
+bg.col="transparent"
+
+saveGIF({
+  #layout(matrix(c(1,2,3,3, 3, 3), 3, 2, byrow = TRUE))
+  par(mfrow=c(1,2), pty="s", font.main=1, 
+      bg=bg.col, fg=fg.col, 
+      col.axis=fg.col, col.main=fg.col, 
+      col.lab=fg.col)
+  par(mar=c(0,0,2,0), mgp=c(0,0,0))
+  
+  tmp.x <- state.x77[,'Income']
+  tmp2.x <- cut(tmp.x, seq(min(tmp.x),max(tmp.x), length.out=10),
+              include.lowest=TRUE)
+  
+  tmp.y <- state.x77[,'HS Grad']
+  tmp2.y <- cut(tmp.y, seq(min(tmp.y),max(tmp.y), length.out=10),
+              include.lowest=TRUE)
+  
+  # a radnom order of states to plot
+  order.plot=sample(1:length(tmp.y))
+  
+  col.bg=rep(bg.col, length(tmp.y))
+  
+  # generate the color of each state depending on the values of
+  # x variable and y varialbe.
+  col.fg.x=brewer.pal(9,"Blues")[tmp2.x]
+  col.fg.y=brewer.pal(9,"Reds")[tmp2.y]
+  
+  for(i in 1:length(order.plot)){
+    col.use.x=col.bg
+    col.use.y=col.bg
+    col.use.x[order.plot[1:i]]=col.fg.x[order.plot[1:i]]
+    col.use.y[order.plot[1:i]]=col.fg.y[order.plot[1:i]]
+    
+    plot(state.vbm,col=col.use.x, 
+         main="Income Per Capita")
+    plot(state.vbm,col=col.use.y, 
+         main="Perc. of High School Graduates")
+    
+#     par(mar=c(5,4,2,1), mgp=c(3,2,1))
+#     
+#     plot(state.x77[, "Income"], state.x77[,"HS Grad"], 
+#          xlab="Income",
+#          ylab="Perc. of high school graduate",
+#          type="n")
+#     text(state.x77[order.plot[1:i], "Income"], 
+#          state.x77[order.plot[1:i],"HS Grad"], 
+#          state.abb[order.plot[1:i]])
+  }
+}, movie.name="maps1.gif", ani.width=600, ani.height=300)
+```
+
+The final product 
+![output gif](maps1.gif)
