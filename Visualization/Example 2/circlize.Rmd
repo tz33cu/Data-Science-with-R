@@ -1,0 +1,41 @@
+---
+title: "ChordDiagram"
+author: "Tian Zheng"
+date: "October 7, 2015"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+From a latest [KDknuggets poll](http://www.kdnuggets.com/2015/07/poll-primary-analytics-language-r-python.html), both R and Python have furthered their dominance as programming language for analytics, data analysis, data mining and modeling. Here I present the data in a chord diagram using the R package [circlize](http://tz33cu.blogspot.com/2014/12/circlize-your-visualization.html).
+
+```{r}
+require(circlize)
+require(RColorBrewer)
+```
+
+I checked the original graph on KDN and derived the following fractions.
+```{r, echo=FALSE}
+## Data from the poll
+mat.v=matrix(c(0.40480, 0.0506, 0.00460, 0.000,
+               0.01771, 0.2093, 0.00529, 0.000,
+               0.04370, 0.0253, 0.16100, 0.000,
+               0.04400, 0.0000, 0.00000, 0.036), 
+               4, 4, byrow=T)
+colnames(mat.v)=c("R 2015", "Python 2015", "Other 2015", "None 2015")
+rownames(mat.v)=c("R 2014", "Python 2014", "Other 2014", "None 2014")
+```
+
+```{r, fig.width=5, fig.height=5}
+par(pty="s")
+circos.clear()
+circos.par(start.degree=-105)
+circos.par(gap.degree=c(rep(2, nrow(mat.v)-1), 30, 
+                          rep(2, ncol(mat.v)-1), 30))
+grid.col=rep(brewer.pal(4, "Set2"), 2)
+chordDiagram(mat.v, order=c("R 2014", "None 2014", 
+                             "Other 2014", "Python 2014",
+                             "Python 2015", "Other 2015", 
+                             "None 2015", "R 2015"), 
+              grid.col=grid.col, directional=TRUE)
+```
