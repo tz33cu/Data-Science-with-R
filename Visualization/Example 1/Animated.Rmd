@@ -2,7 +2,7 @@
 title: "Animated plot using animation package"
 author: "Tian Zheng"
 date: "October 7, 2015"
-output: pdf_document
+output: html_document
 ---
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
@@ -93,17 +93,7 @@ saveGIF({
     plot(state.vbm,col=col.use.x, 
          main="Income Per Capita")
     plot(state.vbm,col=col.use.y, 
-         main="Perc. of High School Graduates")
-    
-#     par(mar=c(5,4,2,1), mgp=c(3,2,1))
-#     
-#     plot(state.x77[, "Income"], state.x77[,"HS Grad"], 
-#          xlab="Income",
-#          ylab="Perc. of high school graduate",
-#          type="n")
-#     text(state.x77[order.plot[1:i], "Income"], 
-#          state.x77[order.plot[1:i],"HS Grad"], 
-#          state.abb[order.plot[1:i]])
+         main="Perc. of High School Graduates")    
   }
 }, movie.name="maps1.gif", ani.width=600, ani.height=300)
 ```
