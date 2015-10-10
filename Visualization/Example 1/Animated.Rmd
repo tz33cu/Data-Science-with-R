@@ -10,10 +10,10 @@ Step 1: first you would need to install imageMagick. I used an installer from <h
 
 Step 2: load the required libraries and map.
 ```{r, results="hide"}
-require(animation)
-require(RColorBrewer)
-require(maps)
-require(maptools)
+require(animation, quietly=T)
+require(RColorBrewer, quietly=T)
+require(maps, quietly=T)
+require(maptools, quietly=T)
 data(state.vbm)
 ```
 

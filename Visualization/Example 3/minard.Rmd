@@ -1,0 +1,117 @@
+---
+title: "Minard plot revisioned"
+author: "Tian Zheng"
+date: "October 9, 2015"
+output: html_document
+---
+#Revision of Minard's plot
+
+### Description from R package HistData
+"Charles Joseph Minard's graphic depiction of the fate of Napoleon's Grand Army in the Russian campaign of 1815 has been called the "greatest statistical graphic ever drawn" (Tufte, 1983). [Friendly (2002)](http://www.datavis.ca/gallery/re-minard.php) describes some background for this graphic, and presented it as Minard's Chalenge: to reproduce it using modern statistical or graphic software, in a way that showed the elegance of some computer language to both describe and produce this graphic."
+
+![minard plot]{https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png}
+
+```{r, echo=FALSE}
+require(HistData)
+require(maps)
+require(mapproj)
+require(ggplot2)
+require(RgoogleMaps)
+require(sp)
+require(RColorBrewer)
+require(grid)
+require(lava)
+```
+
+### ggplot2 implementation from the HistData example codes. 
+
+```{r, ggplots}
+ plot_troops <- ggplot(Minard.troops, aes(long, lat)) +
+   geom_path(aes(size = survivors, colour = direction, group = group))
+ 
+ plot_both <- plot_troops + 
+   geom_text(aes(label = city), size = 4, data = Minard.cities)
+ 
+ plot_polished <- plot_both + 
+   scale_size_continuous(range = c(1, 12), 
+     breaks = c(1, 2, 3) * 10^5, labels = format(c(1, 2, 3) * 10^5)) + 
+   scale_colour_manual(values = c("grey50","red")) +
+   xlab(NULL) + 
+   ylab(NULL)
+ 
+ plot_polished
+```
+
+### Revision the Minard's plot using RgoogleMap
+
+First separate the individual tracks.
+```{r, separate tracks}
+Minard.troops.list=list(1:6)
+tracks=NULL
+tracks$direction=rep(c("A", "R"), each=3)
+tracks$rt=rep(1:3, 2)
+
+for(i in 1:6){
+  Minard.troops.list[[i]]=Minard.troops[(Minard.troops[,4]==tracks$direction[i])&(Minard.troops[,5]==tracks$rt[i]),1:3]
+  Minard.troops.list[[i]]$up=Minard.troops.list[[i]]$lat+
+    Minard.troops.list[[i]]$survivors/1500000
+  Minard.troops.list[[i]]$lo=Minard.troops.list[[i]]$lat-
+    Minard.troops.list[[i]]$survivors/1500000
+  Minard.troops.list[[i]]$size=Minard.troops.list[[i]]$survivors/1500000
+}
+```
+
+Second, setup the map.
+
+```{r}
+lat=Minard.troops$lat
+lon=Minard.troops$lon
+center = c((max(lat)+min(lat))/2, (max(lon)+min(lon))/2);
+zoom <- min(MaxZoom(range(lat), range(lon)))
+
+MyMap <- GetMap(center=center, zoom=zoom,
+                size=c(640, 300),
+                GRAYSCALE=TRUE,
+                destfile = "MyTile1.png")
+```
+
+Using `PlotArrowsOnStaticMap` and `PloyPolysOnStaticMap` to show the survivors along the tracks. 
+
+```{r}
+col.use=c(brewer.pal(3, "Set1"), brewer.pal(3, "Pastel1"))
+
+for(i in 1:6){
+  rt.len=nrow(Minard.troops.list[[i]])
+  add.ind=TRUE
+  if(i == 1) {add.ind=FALSE}
+  PlotArrowsOnStaticMap(MyMap, 
+                        lat0=Minard.troops.list[[i]]$lat[-rt.len], 
+                        lon0=Minard.troops.list[[i]]$long[-rt.len], 
+                        lat1=Minard.troops.list[[i]]$lat[-1], 
+                        lon1=Minard.troops.list[[i]]$long[-1], 
+                        add=add.ind,
+                        length=unit(0.1, "npc"),
+                        lwd=4,
+                        col = col.use[i])
+ 
+  
+}
+
+Srs=list(1:6)
+for(i in 1:6){
+  rt.len=nrow(Minard.troops.list[[i]])
+  xx=c(Minard.troops.list[[i]][,1], Minard.troops.list[[i]][rt.len:1,1])
+  yy=c(Minard.troops.list[[i]][,4], Minard.troops.list[[i]][rt.len:1,5])
+  Sr1 = Polygon(cbind(xx, yy))
+  Srs[[i]] = Polygons(list(Sr1), paste("s", i, sep=""))
+}
+
+SpP = SpatialPolygons(Srs, 1:6)
+
+PlotPolysOnStaticMap(MyMap, SpP, 
+                     lwd=2, 
+                     border=NA,
+                     col = Col(col.use, alpha=0.6), 
+                     add = T)
+```
+
