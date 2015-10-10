@@ -2,14 +2,14 @@
 title: "Minard plot revisioned"
 author: "Tian Zheng"
 date: "October 9, 2015"
-output: html_document
+output: pdf_document
 ---
 #Revision of Minard's plot
 
 ### Description from R package HistData
 "Charles Joseph Minard's graphic depiction of the fate of Napoleon's Grand Army in the Russian campaign of 1815 has been called the "greatest statistical graphic ever drawn" (Tufte, 1983). [Friendly (2002)](http://www.datavis.ca/gallery/re-minard.php) describes some background for this graphic, and presented it as Minard's Chalenge: to reproduce it using modern statistical or graphic software, in a way that showed the elegance of some computer language to both describe and produce this graphic."
 
-![minard plot]{https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png}
+![minard plot](https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png)
 
 ```{r, echo=FALSE}
 require(HistData)
