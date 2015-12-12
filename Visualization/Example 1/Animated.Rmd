@@ -14,6 +14,7 @@ require(animation, quietly=T)
 require(RColorBrewer, quietly=T)
 require(maps, quietly=T)
 require(maptools, quietly=T)
+require(datasets, quietly=T)
 data(state.vbm)
 ```
 
