@@ -1,9 +1,3 @@
----
-title: "Minard plot revisioned"
-author: "Tian Zheng"
-date: "October 9, 2015"
-output: pdf_document
----
 #Revision of Minard's plot
 
 ### Description from R package HistData
