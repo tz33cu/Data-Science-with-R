@@ -1,10 +1,3 @@
----
-title: "ChordDiagram"
-author: "Tian Zheng"
-date: "October 7, 2015"
-output: pdf_document
----
-
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 From a latest [KDknuggets poll](http://www.kdnuggets.com/2015/07/poll-primary-analytics-language-r-python.html), both R and Python have furthered their dominance as programming language for analytics, data analysis, data mining and modeling. Here I present the data in a chord diagram using the R package [circlize](http://tz33cu.blogspot.com/2014/12/circlize-your-visualization.html).
