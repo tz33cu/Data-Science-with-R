@@ -1,6 +1,9 @@
 ---
 title: "Basic data operations"
-output: html_notebook
+output:
+  html_document: default
+  html_notebook: default
+  pdf_document: default
 ---
 
 #### Note:
@@ -18,7 +21,6 @@ library(RColorBrewer)
 ```
 ### Read in the data
 
-
 R can read data from data files such as csv, txt, and output from other softwares such as STATA and SAS. Google for "R load data xx format" should usually point you to the right direction. CSV is usually one of the most widely used format for data nowadays. 
 
 Now let's read in the baseball salary data set. 
@@ -34,6 +36,8 @@ datatable(head(BaseballSalary,50), options = list(scrollX=T, pageLength = 5))
 ```
 
 ### Explore the data with graphs
+
+Select a specific year's data and plot a distribution of the players' salaries during that year. 
 ```{r, fig.height=8, fig.width=6}
 col.use=brewer.pal(10, "RdYlBu")
 hist.1985=hist(filter(BaseballSalary, year==1985)$salary, 
@@ -46,6 +50,13 @@ hist(filter(BaseballSalary, year==2004)$salary,
      xlab="annual salary",
      col=col.use, 
      nclass = 50)
+```
+
+To make a more meaningful comparison, we save the `hist` object from the 1985 plot and use the `breaks` from this object for plotting the 2004 data. The range for the year 2004 is wider than the year 1985, we then add a last bin to include the maximum value. Lastly, when comparing two histograms, it is important to make the two plots with the same scales for the axes. 
+
+Here we can see the effects of the minimum salary in MLB in year 2004. 
+
+```{r, fig.height=10, fig.width=8}
 par(mfrow=c(2,1))
 hist.1985=hist(filter(BaseballSalary, year==1985)$salary, 
                main="salaries in 1985",
@@ -63,18 +74,18 @@ hist(filter(BaseballSalary, year==2004)$salary,
      freq=T)
 ```
 
+Now we take a look how the distributions of the salaries over the years.
++ We see that the distributions of the salaries become more skewed to the high values.
++ The median salary remains more or less flat.
++ What happened from 1994 to 1995? [Answer](https://en.wikipedia.org/wiki/1994%E2%80%9395_Major_League_Baseball_strike)
 
-Change the plot aspect ratio.
-```{r, fig.height=4, fig.width=6}
+```{r, fig.height=6, fig.width=9}
 par(mfrow=c(1,1))
 plot(salary~as.factor(year), data=BaseballSalary, col=col.use)
 ```
 
-What happened from 1994 to 1995? [Answer](https://en.wikipedia.org/wiki/1994%E2%80%9395_Major_League_Baseball_strike)
-
 ## The `dplyr` package
 Dplyr aims to provide a function for each basic verb of data manipulation.
-
 - `filter()`
 - `arrange()`
 - `select()`
@@ -85,6 +96,13 @@ Dplyr aims to provide a function for each basic verb of data manipulation.
 - `group_by`
 
 ### Compute some team summary statistics.
+In the following, we compute for each team (`teamID`) and `year` a list of summary statistics: 
++ `count`: number of players
++ `total`: team's total payroll for that year
++ `median`: median salary
++ `mean`: mean salary
++ `min`, `max`, `q1`, `q3`: minimum, maximum, first quartile and third quartile of salaries.
+
 ```{r}
 BSTeamYear=BaseballSalary%>%
           group_by(teamID, year)%>%
@@ -102,7 +120,7 @@ sample_n(BSTeamYear, 10)
 ```
 
 ### Visualize team compensation trends in 2004.
-```{r, fig.height=3, fig.width=6}
+```{r, fig.height=6, fig.width=9}
 datatable(filter(BSTeamYear, year==2004), options = list(scrollX=T, pageLength = 10))
 BS2004=filter(BaseballSalary, year==2004)
 plot(as.factor(BS2004$teamID), BS2004$salary, col=col.use, las=2)
