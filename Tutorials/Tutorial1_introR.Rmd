@@ -93,8 +93,8 @@ hist(x)
 ```{r}
 x=seq(-pi, pi, len=100)
 y=sin(x)
-plot(x, y, type="h")
-curve((x-0.4)^2+2*x, -pi, pi)
+plot(x, y, col="purple", type="h")
+curve(sin(x), -pi, pi)
 ```
 
 
