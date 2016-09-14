@@ -3,8 +3,8 @@ This repository is to store some of my experiments in DS using R.
 
 ## Tutorials
 - Tutorial 0: Get started with R by completing [Try R](http://tryr.codeschool.com/) from Code School. 
-- Tutorial 1: [Introduction to R](Tutorial_introR.nb.html). ([R notebook](Tutorial_introR.Rmd)).
-- Tutoral 1b: [Exploring MLB salaries](Tutorial1b_baseball.nb.html). ([R notebook](Tutorial1b_baseball.Rmd)).
+- Tutorial 1: [Introduction to R](Tutorials/Tutorial_introR.nb.html). ([R notebook](Tutorials/Tutorial_introR.Rmd)).
+- Tutoral 1b: [Exploring MLB salaries](Tutorials/Tutorial1b_baseball.nb.html). ([R notebook](Tutorials/Tutorial1b_baseball.Rmd)).
 
 
 ## Visualization
