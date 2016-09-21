@@ -1,0 +1,107 @@
+---
+title: 'Tutorial 2: finding assiciations'
+author: "Tian Zheng"
+date: "September 20, 2016"
+output:
+  html_notebook: default
+  html_document: default
+  pdf_document: default
+---
+
+#### Note:
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+## Baseball players batting performance from 2014
+In this tutorial, we will look at the performance of Major League Baseball (MLB) players in the year of 2014. [source from baseballguru.com.](http://baseballguru.com/bbdata1.html)
+
+First we load R libraries that we need for this tutorial. Basic libraries of functions are loaded every time R starts. More specialized functions need to be loaded first before they can used. 
+```{r}
+library(dplyr)
+library(readr)
+library(DT)
+library(RColorBrewer)
+```
+
+### Read in the data
+
+Now let's read in the baseball 2014 batting performance data set. 
+
+```{r}
+mlb2014=read_csv(file="data/mlb2014.csv")
+```
+
+Most of variables are read as characters. It is because "-" was used as an indicator of missing value. We add "-" in the string or recognized NA symbols and the issue is solved. 
+
+```{r}
+mlb2014=read_csv(file="data/mlb2014.csv", na=c("", "-", "NA"))
+```
+Now we use `datatable` to explore the data a little bit. 
+
+```{r}
+dim(mlb2014)
+datatable(select(sample_n(mlb2014,50), ends_with("G")), options = list(scrollX=T, pageLength = 5))
+```
+
+### Association: categorical variables
+
+#### Positions versus handedness
+![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Baseball_positions.svg/600px-Baseball_positions.svg.png)
+
+```{r}
+table(mlb2014$pos1)
+table(mlb2014$bats)
+table(mlb2014$pos1, mlb2014$bats)
+```
+
+```{r}
+col.use=brewer.pal(4, 'Set2')
+plot(table(mlb2014$pos1, mlb2014$bats), col=col.use)
+```
+
+```{r}
+chisq.test(table(mlb2014$pos1, mlb2014$bats))
+```
+
+### Association: categorical versus continuous
+
+#### Slugging percentage versus positions.
+
+From [wikipedia](https://en.wikipedia.org/wiki/Slugging_percentage): "In baseball statistics, slugging percentage (SLG) is a popular measure of the power of a hitter."
+
+```{r}
+hist(mlb2014$slg)
+plot(as.factor(mlb2014$pos1), mlb2014$slg, col=col.use)
+summary(lm(slg~as.factor(pos1), data=mlb2014))
+anova(lm(slg~as.factor(pos1), data=mlb2014))
+```
+
+#### On base percentage versus position. 
+
+Another important baseball statistics is On Base Percentage ([OBP](https://en.wikipedia.org/wiki/On-base_percentage)). 
+
+```{r}
+hist(mlb2014$obp)
+plot(as.factor(mlb2014$pos1), mlb2014$obp, col=col.use)
+summary(lm(obp~as.factor(pos1), data=mlb2014))
+anova(lm(obp~as.factor(pos1), data=mlb2014))
+```
+### Association: continuous versus continuous
+
+#### On base percentage versus slugging percentage 
+
+```{r}
+cor(mlb2014$slg, mlb2014$obp)
+cor(mlb2014$slg, mlb2014$obp, use="complete.obs")
+plot(slg~obp, data=mlb2014)
+cor.test(~slg+obp, data=mlb2014)
+```
+
+#### On base percentage versus age
+
+```{r}
+hist(mlb2014$age)
+plot(obp~age, data=mlb2014)
+summary(lm(obp~age, data=mlb2014))
+cor.test(~age+obp, data=mlb2014)
+```
+
