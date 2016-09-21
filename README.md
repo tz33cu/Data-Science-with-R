@@ -5,6 +5,8 @@ This repository is to store some of my experiments in DS using R.
 - Tutorial 0: Get started with R by completing [Try R](http://tryr.codeschool.com/) from Code School. 
 - Tutorial 1: [Introduction to R](https://rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial1_introR.html). ([R notebook](Tutorials/Tutorial1_introR.Rmd)).
 - Tutoral 1b: [Exploring MLB salaries](https://rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial1b_baseball.html). ([R notebook](Tutorials/Tutorial1b_baseball.Rmd)).
+- Tutorial 2: [Analizing associations](https://rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial2_Association.html). ([R notebook](Tutorials/Tutorial2_Association.Rmd)).
+- Tutorial 2b: [Regression analysis](https://rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial2b_states.html). ([R notebook](Tutorials/Tutorial2b_states.Rmd)).
 
 
 ## Visualization
