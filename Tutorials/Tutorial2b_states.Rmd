@@ -3,8 +3,9 @@ title: 'Tutorial 2b: regression'
 author: "Tian Zheng"
 date: "September 20, 2016"
 output:
-  pdf_document: default
+  html_document: default
   html_notebook: default
+  pdf_document: default
 ---
 
 In this example, we are going to use the dataset `state.x77` that comes with standard `R` installation. It is a data set about the 50 states of united states. 
