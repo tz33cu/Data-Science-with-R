@@ -52,6 +52,8 @@ plot(life.exp~inc, data=statedata)
 We can compute the correlation between these two variables. The value of the correlation indicates a weak positive linear association. 
 ```{r}
 cor(statedata[,"life.exp"], statedata[,"inc"])
+# remove AK
+cor(statedata[-2,"life.exp"], statedata[-2,"inc"])
 ```
 
 There is one observation that is far away from the rest of the points. We would like to know which state is corresponding to that point. Let's add state abbreviations to the plot. 
@@ -78,6 +80,18 @@ i.e., the sum of squared prediction errors.
 ```{r}
 model1=lm(life.exp~inc, data=statedata)
 model1
+plot(life.exp~inc, data=statedata, type="n")
+text(life.exp~inc, data=statedata, state.abb)
+abline(model1$coefficients, 
+       lty=2, lwd=2.5, col=4)
+obs.remove=sample(1:nrow(statedata), 1)
+points(statedata$inc[obs.remove],
+       statedata$life.exp[obs.remove],
+       cex=3,col=2)
+model2=lm(life.exp~inc, data=statedata[-obs.remove,])
+model2
+abline(model2$coefficients, 
+       lty=3, lwd=2.5,col=2)
 ```
 
 In the above output, the intercept is $b_0$ and the coeffient under the column (`inc`) is $b_1$--the slope. The slope is estimated to be $7.4\times 10^{-4}$. The maganitude of this value does not mean that the effect of income on life expectance is very small. This maganitude is decided by the maganitude of the $X$ variable and $Y$ variable. 
@@ -108,7 +122,7 @@ for(i in 1:4){
   ## Plot the population
   plot(life.exp~inc, data=statedata,
        xlab="Life Expectancy", ylab="Income",
-       title=paste("Random sample", format(i)),
+       main=paste("Random sample", format(i)),
        ylim=c(min(life.exp), max(life.exp)+0.3))
   abline(model1)
   if(i==1){
