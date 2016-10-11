@@ -7,8 +7,8 @@ This repository is to store some of my experiments in DS using R.
 - Tutoral 1b: [Exploring MLB salaries](http://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial1b_baseball.html). ([R notebook](Tutorials/Tutorial1b_baseball.Rmd)).
 - Tutorial 2: [Analizing associations](http://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial2_Association.html). ([R notebook](Tutorials/Tutorial2_Association.Rmd)).
 - Tutorial 2b: [Regression analysis](https://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial2b_states.html). ([R notebook](Tutorials/Tutorial2b_states.Rmd)).
-- Tutorial 6a: A simple [tutorial](https://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial6b_shiny.html) [rmd file](Tutorials/Tutorial6b_shiny.Rmd) to get started [An example Shiny app](Tutorials/Tutorial6-shiny/)
-- Tutorial 6b: A flex dashboard [example](Tutorials/Tutorial6-flexDB.rmd) [html output](https://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial6-flexDB.html)
+- Tutorial 6a: A simple [tutorial](https://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial6b_shiny.html) [[rmd file](Tutorials/Tutorial6b_shiny.Rmd)] to get started [[An example Shiny app](Tutorials/Tutorial6-shiny/)]
+- Tutorial 6b: A flex dashboard [example](Tutorials/Tutorial6-flexDB.rmd) [[html output](https://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial6-flexDB.html)]
 
 
 ## Visualization
