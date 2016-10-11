@@ -7,6 +7,7 @@ This repository is to store some of my experiments in DS using R.
 - Tutoral 1b: [Exploring MLB salaries](http://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial1b_baseball.html). ([R notebook](Tutorials/Tutorial1b_baseball.Rmd)).
 - Tutorial 2: [Analizing associations](http://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial2_Association.html). ([R notebook](Tutorials/Tutorial2_Association.Rmd)).
 - Tutorial 2b: [Regression analysis](https://cdn.rawgit.com/tz33cu/Data-Science-with-R/master/Tutorials/Tutorial2b_states.html). ([R notebook](Tutorials/Tutorial2b_states.Rmd)).
+- Tutorial 6: [An example Shiny app](Tutorials/Tutorial6-shiny/)
 
 
 ## Visualization
