@@ -21,7 +21,7 @@ shinyUI(
     
     fluidRow(
       column(6,  
-             h1('select rows'), 
+             h1('select at least 2 rows'), 
              DT::dataTableOutput('x1')),
       column(6, 
              plotOutput('x2', height = 400))

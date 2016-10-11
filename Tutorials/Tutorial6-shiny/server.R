@@ -2,11 +2,11 @@ library(shiny)
 library(DT)
 shinyServer(function(input, output) {
   
-  selectedData <- 
+  #selectedData <- 
     #airquality[,c(input$xcol,input$ycol)]
-    reactive({
-      airquality[, c(input$xcol, input$ycol)]
-    })
+  #  reactive({
+  #    airquality[, c(input$xcol, input$ycol)]
+  #  })
   nn <- nrow(airquality)
   
   output$x1 = DT::renderDataTable(airquality[,-c(5,6)], 
@@ -15,7 +15,7 @@ shinyServer(function(input, output) {
                                     pageLength = 5
                                   ),
                                   server = FALSE,
-                                  selection = list(target = 'row+column'))
+                                  selection = list(target = 'row'))
   
   proxy = dataTableProxy('x1')
   
@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
     par(mar = c(4, 4, 1, .1))
     plot(airquality[, c(input$xcol, input$ycol)])
     s = input$x1_rows_selected
-    if (length(s)) {
+    if (length(s)>=2) {
       points(airquality[s, c(input$xcol, input$ycol), drop = FALSE], 
              pch = 19, cex = 2)
       abline(lsfit(airquality[s,input$xcol], 
@@ -43,7 +43,8 @@ shinyServer(function(input, output) {
     if(length(s)) cor.sel=cor(airquality[s,input$xcol], 
                               airquality[s,input$ycol],
                               use="pairwise.complete.obs")
-    list(xcol=input$xcol, ycol=input$ycol, 
+    list(selected=s, 
+         xcol=input$xcol, ycol=input$ycol, 
          cor.all=cor(airquality[,input$xcol], 
                      airquality[,input$ycol],
                      use="pairwise.complete.obs"),

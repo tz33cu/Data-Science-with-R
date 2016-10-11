@@ -1,0 +1,64 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+```
+
+Column {data-width=900}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+hist(faithful$eruptions)
+```
+
+### Chart B
+
+```{r}
+hist(faithful$waiting)
+```
+
+
+Column {data-width=900}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r}
+plot(faithful$waiting, faithful$eruptions)
+```
+
+### Chart D
+
+```{r}
+library(shiny)
+shinyApp(
+  ui = fillPage(
+    fillCol(flex = c(NA, 1), 
+      inputPanel(
+             selectInput("n_breaks", label = "Number of bins:",
+                  choices = c(10, 20, 35, 50), selected = 20)
+      ),
+      plotOutput("plot", height = "90%")
+    )
+  ),
+  server = function(input, output) {
+     output$plot=renderPlot({
+    hist(faithful$eruptions, 
+         probability = TRUE, 
+         breaks = as.numeric(input$n_breaks),
+         xlab = "Duration (minutes)", 
+         main = "Geyser eruption duration")}
+  )}
+)
+```
+

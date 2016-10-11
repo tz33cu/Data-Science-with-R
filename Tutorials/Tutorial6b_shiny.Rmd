@@ -1,0 +1,242 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: spacelab
+    runtime: shiny
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+# Step 1: Getting ready
+## Install `Shiny`.
+```{r, eval=F}
+install.packages("shiny")
+```
+
+## Load the libraries.
+```{r}
+library(shiny)
+```
+
+## Setting up your folder
+R `shiny` provides a platform for making a web application from Rstudio. You need to select a working folder in your computer and set up an `app` folder, where you need to initiate two files: `ui.R` and `server.R`. 
+![set up an app folder](http://shiny.rstudio.com/tutorial/lesson1/images/example1-folder.png)
+
+## Initiate app files
+
+An example app with the pair of files: 
+
+```{r, echo=F}
+library(shiny)
+shinyApp(
+  ui=fluidPage(
+    sidebarPanel(
+      selectInput("n_breaks", label = "Number of bins:",
+                  choices = c(10, 20, 35, 50), selected = 20),
+      
+      sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+                  min = 0.2, max = 2, value = 1, step = 0.2)
+    ),
+    mainPanel(
+      plotOutput("plot")
+    )
+  ),
+  server<-function(input, output) {
+    output$plot=renderPlot({
+    hist(faithful$eruptions, 
+         probability = TRUE, 
+         breaks = as.numeric(input$n_breaks),
+         xlab = "Duration (minutes)", 
+         main = "Geyser eruption duration")
+    
+    dens <- density(faithful$eruptions, 
+                    adjust = input$bw_adjust)
+    lines(dens, col = "blue")
+    })
+  }
+)
+```
+
+### An example of `server.R`
+```{r, eval=F}
+library(shiny)
+
+shinyServer(function(input, output) {
+
+    output$plot=renderPlot({
+    hist(faithful$eruptions, 
+         probability = TRUE, 
+         breaks = as.numeric(input$n_breaks),
+         xlab = "Duration (minutes)", 
+         main = "Geyser eruption duration")
+    
+    dens <- density(faithful$eruptions, 
+                    adjust = input$bw_adjust)
+    lines(dens, col = "blue")
+  })
+})
+```
+
+### An example of `ui.R`
+```{r, eval=F}
+shinyUI(
+fluidPage(
+  sidebarPanel(
+    selectInput("n_breaks", label = "Number of bins:",
+                choices = c(10, 20, 35, 50), selected = 20),
+    
+    sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+                min = 0.2, max = 2, value = 1, step = 0.2)
+  ),
+  mainPanel(
+    plotOutput("plot")
+  )
+))
+```
+
+# Step 2: Use a Shiny theme
+You can slightly change the look of your shiny app by choosing a [theme](https://rstudio.github.io/shinythemes/).
+
+```{r, eval=F}
+install.packages("shinythemes")
+```
+
+```{r, eval=F}
+## ui.R ##
+library(shinythemes)
+
+fluidPage(theme = shinythemes("cerulean"),
+  ...
+)
+```
+
+```{r, echo=F}
+library(shiny)
+library(shinythemes)
+shinyApp(
+  ui=fluidPage(theme = shinytheme("spacelab"),
+    sidebarPanel(
+      selectInput("n_breaks", label = "Number of bins:",
+                  choices = c(10, 20, 35, 50), selected = 20),
+      
+      sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+                  min = 0.2, max = 2, value = 1, step = 0.2)
+    ),
+    mainPanel(
+      plotOutput("plot")
+    )
+  ),
+  server<-function(input, output) {
+    output$plot=renderPlot({
+    hist(faithful$eruptions, 
+         probability = TRUE, 
+         breaks = as.numeric(input$n_breaks),
+         xlab = "Duration (minutes)", 
+         main = "Geyser eruption duration")
+    
+    dens <- density(faithful$eruptions, 
+                    adjust = input$bw_adjust)
+    lines(dens, col = "blue")
+    })
+  }
+)
+```
+
+# Step 3: Choose a data set to use
+For the purpose of this exercise, we will use the `airquality` data set in R. 
+
+```{r}
+library(shiny)
+library(DT)
+shinyApp(
+  ui=fluidPage(
+    headerPanel('Air Quality Data'),
+    sidebarPanel(
+      title = 'Air Quality Data',
+      selectInput('xcol', 'X Variable', names(airquality)[-c(5,6)],
+                  selected=names(airquality)[[1]]),
+      selectInput('ycol', 'Y Variable', names(airquality)[-c(5,6)],
+                  selected=names(airquality)[[2]]),
+     # actionButton('select2', 'Select the above variables.'),
+      sliderInput("subsample", label = "Size of random samples",
+                  min = 5, max = 50, value = 10, step = 1),
+      actionButton('resetSelection',
+                   label = "Click to reset row selection"
+      ) # end of action button
+    ),
+    mainPanel(
+      
+      fluidRow(
+        column(6,  
+               h1('select rows'), 
+               DT::dataTableOutput('x1')),
+        column(6, 
+               plotOutput('x2', height = 400))
+      ),
+      verbatimTextOutput('info')
+    )
+  ),
+  server<-function(input, output) {
+    
+    selectedData <- 
+    #airquality[,c(input$xcol,input$ycol)]
+    reactive({
+        airquality[, c(input$xcol, input$ycol)]
+      })
+    nn <- nrow(airquality)
+    
+    output$x1 = DT::renderDataTable(airquality[,-c(5,6)], 
+                                    options = list(
+                                      lengthMenu = list(c(3, 5, 10), c('3', '5', '10')),
+                                      pageLength = 5
+                                    ),
+                                    server = FALSE,
+                                    selection = list(target = 'row+column'))
+    
+    proxy = dataTableProxy('x1')
+    
+    observeEvent(input$resetSelection, {
+      proxy %>% selectRows(sample(1:nn, input$subsample, replace=F))
+    })
+    
+    
+    # highlight selected rows in the scatterplot
+    output$x2 = renderPlot(height = 400, {
+      par(mar = c(4, 4, 1, .1))
+      plot(airquality[, c(input$xcol, input$ycol)])
+      s = input$x1_rows_selected
+      if (length(s)) {
+        points(airquality[s, c(input$xcol, input$ycol), drop = FALSE], 
+                            pch = 19, cex = 2)
+        abline(lsfit(airquality[s,input$xcol], 
+                     airquality[s,input$ycol])$coef, col=2)
+      }
+    })
+    
+    output$info = renderPrint({
+      s = input$x1_rows_selected
+      cor.sel=NA
+      if(length(s)) cor.sel=cor(airquality[s,input$xcol], 
+                                airquality[s,input$ycol],
+                                use="pairwise.complete.obs")
+      list(xcol=input$xcol, ycol=input$ycol, 
+           cor.all=cor(airquality[,input$xcol], 
+                       airquality[,input$ycol],
+                       use="pairwise.complete.obs"),
+           cor.sel=cor.sel)
+    })
+    
+  }
+)
+```
+
+# Step 4: make a R flex dashboard
+
+```{r, eval=F}
+install.packages("flexdashboard", type = "source")
+```
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
