@@ -22,7 +22,7 @@ shinyUI(
     ),
     mainPanel(width=9,
       fluidRow(column(12, plotOutput('GBMfit', height=400))),
-      fluidRow(column(12, plotOutput('errorcurve', height=200)))
+      fluidRow(column(12, plotOutput('errorcurve', height=300)))
     )
   )
 )

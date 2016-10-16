@@ -3,9 +3,9 @@ title: Tutorial7-GBM
 account: tz33cu
 server: shinyapps.io
 appId: 131960
-bundleId: 587536
+bundleId: 587561
 url: https://tz33cu.shinyapps.io/Tutorial7-GBM/
-when: 1476586929.46754
+when: 1476592427.51248
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: gbm_demo.nb.html|gbm_demo.R|gbm_demo.Rmd|results.pdf
+ignoredFiles: docs/gbm_demo.nb.html|docs/gbm_demo.Rmd|docs/results.pdf
