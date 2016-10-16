@@ -1,14 +1,17 @@
 ---
 title: "R GBM demo"
 output:
-  html_document: default
-  html_notebook: default
+  html_document:
+    toc: true
+    toc_float: true
+    theme: spacelab
+runtime: shiny
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
 ## Step 1: Install the GBM library.
-```{r}
+```{r, eval=F}
 install.packages("gbm")
 ```
 
