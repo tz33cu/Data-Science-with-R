@@ -1,10 +1,8 @@
 name: tutoral6-shiny
-title: Tutorial6-shiny
+title:
 account: tz33cu
 server: shinyapps.io
 appId: 131097
-bundleId: 587537
+bundleId: 584762
 url: https://tz33cu.shinyapps.io/tutoral6-shiny/
-when: 1476587091.79352
-asMultiple: FALSE
-asStatic: FALSE
+when: 1476294801.7369

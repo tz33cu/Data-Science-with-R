@@ -26,15 +26,27 @@ shinyServer(function(input, output) {
   
   # highlight selected rows in the scatterplot
   output$x2 = renderPlot(height = 400, {
-    par(mar = c(4, 4, 1, .1))
+    par(mar = c(4, 4, 2, .1), font.main=1)
+    options(digits = 2)
+    cor.all=cor(airquality[,input$xcol], 
+                airquality[,input$ycol],
+                use="pairwise.complete.obs")
     plot(airquality[, c(input$xcol, input$ycol)])
     s = input$x1_rows_selected
+    abline(lsfit(airquality[,input$xcol], 
+                 airquality[,input$ycol])$coef, col=1, lty=2)
+    cor.sel=NA
     if (length(s)>=2) {
       points(airquality[s, c(input$xcol, input$ycol), drop = FALSE], 
-             pch = 19, cex = 2)
+             pch = 21, bg=2, cex = 1.5, col=4)
       abline(lsfit(airquality[s,input$xcol], 
                    airquality[s,input$ycol])$coef, col=2)
+      cor.sel=cor(airquality[s,input$xcol], 
+                  airquality[s,input$ycol],
+                  use="pairwise.complete.obs")
     }
+    title(main=paste("correlation (all)=", format(cor.all),
+                    ", correlation (sel)=", format(cor.sel)))
   })
   
   output$info = renderPrint({

@@ -7,9 +7,9 @@ shinyUI(
   sidebarPanel(
     title = 'Air Quality Data',
     selectInput('xcol', 'X Variable', names(airquality)[-c(5,6)],
-                selected=names(airquality)[[1]]),
-    selectInput('ycol', 'Y Variable', names(airquality)[-c(5,6)],
                 selected=names(airquality)[[2]]),
+    selectInput('ycol', 'Y Variable', names(airquality)[-c(5,6)],
+                selected=names(airquality)[[1]]),
     # actionButton('select2', 'Select the above variables.'),
     sliderInput("subsample", label = "Size of random samples",
                 min = 5, max = 50, value = 10, step = 5),
