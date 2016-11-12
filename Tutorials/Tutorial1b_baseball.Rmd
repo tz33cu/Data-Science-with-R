@@ -56,22 +56,28 @@ To make a more meaningful comparison, we save the `hist` object from the 1985 pl
 
 Here we can see the effects of the minimum salary in MLB in year 2004. 
 
-```{r, fig.height=10, fig.width=8}
+```{r, fig.height=4, fig.width=6}
 par(mfrow=c(2,1))
 hist.1985=hist(filter(BaseballSalary, year==1985)$salary, 
                main="salaries in 1985",
                xlab="annual salary",
                col=col.use, 
-               nclass = 50,
-               ylim=c(0, 250))
+               nclass = 20,
+               xlim=c(0, max(filter(BaseballSalary, year==2004)$salary)),
+               ylim=c(0, 0.0000015), freq=F)
+abline(v=mean(filter(BaseballSalary, year==1985)$salary), col=1, lwd=1.5)
+abline(v=median(filter(BaseballSalary, year==1985)$salary), col=2, lwd=1.5)
 hist(filter(BaseballSalary, year==2004)$salary, 
      col=col.use,
      breaks=c(hist.1985$breaks, max(BaseballSalary$salary)),
      main="salaries in 2004",
      xlab="annual salary",
-     xlim=c(0, 2000000), 
-     ylim=c(0,250),
-     freq=T)
+     xlim=c(0, max(filter(BaseballSalary, year==2004)$salary)),
+     ylim=c(0,0.0000015),
+     freq=F)
+abline(v=mean(filter(BaseballSalary, year==2004)$salary), col=1, lwd=1.5)
+abline(v=median(filter(BaseballSalary, year==2004)$salary), col=2, lwd=1.5)
+
 ```
 
 Now we take a look how the distributions of the salaries over the years.
